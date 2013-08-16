@@ -82,7 +82,7 @@ module PdfHelper
     # Given an options hash, prerenders content for the header and footer sections
     # to temp files and return a new options hash including the URLs to these files.
     def prerender_header_and_footer(options)
-      [:header, :footer].each do |hf|
+      [:header, :footer, :cover].each do |hf|
         if options[hf] && options[hf][:html] && options[hf][:html][:template]
           @hf_tempfiles = [] if ! defined?(@hf_tempfiles)
           @hf_tempfiles.push( tf=WickedPdfTempfile.new("wicked_#{hf}_pdf.html") )

@@ -48,7 +48,6 @@ class WickedPdf
 
     temp_path = options.delete(:temp_path)
     string_file = WickedPdfTempfile.new("wicked_pdf.html", temp_path)
-    string_file.binmode
     string_file.write(string)
     string_file.close
     generated_pdf_file = WickedPdfTempfile.new("wicked_pdf_generated_file.pdf", temp_path)
@@ -106,11 +105,13 @@ class WickedPdf
         parse_header_footer(:header => options.delete(:header),
                             :footer => options.delete(:footer),
                             :layout => options[:layout]),
-        parse_toc(options.delete(:toc)),
         parse_outline(options.delete(:outline)),
         parse_margins(options.delete(:margin)),
         parse_others(options),
-        parse_basic_auth(options)
+        parse_basic_auth(options),
+        parse_cover(options.delete(:cover)),        
+        parse_toc(options.delete(:toc))
+        
       ].join(' ')
     end
 
@@ -168,8 +169,20 @@ class WickedPdf
       r
     end
 
+    def parse_cover(options)
+      r = ""
+      return r if options.blank?
+      if options[:html].present?
+        r = "cover #{options[:html][:url]} "
+      else
+        r = "cover #{options.delete(:url)} "
+      end
+      r += parse_others(options) unless options.blank?
+      return r
+    end
+
     def parse_toc(options)
-      r = '--toc ' unless options.nil?
+      r = 'toc ' unless options.nil?
       unless options.blank?
         r += make_options(options, [ :font_name, :header_text], "toc")
         r +=make_options(options, [ :depth,
@@ -215,7 +228,6 @@ class WickedPdf
                                     :proxy,
                                     :username,
                                     :password,
-                                    :cover,
                                     :dpi,
                                     :encoding,
                                     :user_style_sheet])
