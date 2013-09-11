@@ -91,7 +91,7 @@ module WickedPdfHelper
           end
           return asset
         else
-          IO.read(asset_pathname(source))
+          Rails.application.assets.find_asset(source).to_s
         end
       else
         Rails.application.assets.find_asset(source).to_s
