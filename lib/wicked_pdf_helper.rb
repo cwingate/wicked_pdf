@@ -66,11 +66,11 @@ module WickedPdfHelper
 
     def asset_pathname(source)
       if Rails.configuration.assets.compile == false
-        if asset_path(source) =~ URI_REGEXP
+        if path_to_asset(source) =~ URI_REGEXP
           # asset_path returns an absolute URL using asset_host if asset_host is set
-          asset_path(source)
+          path_to_asset(source)
         else
-          File.join(Rails.public_path, asset_path(source).sub(/\A#{Rails.application.config.action_controller.relative_url_root}/, ''))
+          File.join(Rails.public_path, path_to_asset(source).sub(/\A#{Rails.application.config.action_controller.relative_url_root}/, ''))
         end
       else
         Rails.application.assets.find_asset(source).pathname
@@ -79,7 +79,7 @@ module WickedPdfHelper
 
     def read_asset(source)
       if Rails.configuration.assets.compile == false
-        if asset_path(source) =~ URI_REGEXP
+        if path_to_asset(source) =~ URI_REGEXP
           require 'open-uri'
           asset = open(asset_pathname(source), 'r:UTF-8') {|f| f.read }
           if WickedPdf.config[:expect_gzipped_remote_assets]
