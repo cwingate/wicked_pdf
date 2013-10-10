@@ -102,12 +102,12 @@ class WickedPdf
      def parse_options(options, page)
       [
         parse_extra(options),
+        parse_others(options),
         parse_outline(options.delete(:outline)),
         parse_margins(options.delete(:margin)),
         parse_basic_auth(options),
         parse_cover(options.delete(:cover)),        
         parse_toc(options.delete(:toc)), 
-        parse_others(options),
         "file:///#{page.path}",
         parse_header_footer(:header => options.delete(:header),
                             :footer => options.delete(:footer),
