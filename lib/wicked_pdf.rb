@@ -51,7 +51,7 @@ class WickedPdf
     string_file.write(string)
     string_file.close
     generated_pdf_file = WickedPdfTempfile.new("wicked_pdf_generated_file.pdf", temp_path)
-    command = "\"#{@exe_path}\" #{'-q ' unless on_windows?}#{parse_options(options)} \"file:///#{string_file.path}\" \"#{generated_pdf_file.path}\" " # -q for no errors on stdout
+    command = "\"#{@exe_path}\" #{'-q ' unless on_windows?}#{parse_options(options, string_file)} \"#{generated_pdf_file.path}\" " # -q for no errors on stdout
     print_command(command) if in_development_mode?
     err = Open3.popen3(command) do |stdin, stdout, stderr|
       stderr.read
@@ -99,22 +99,22 @@ class WickedPdf
       end
     end
 
-    def parse_options(options)
+     def parse_options(options, page)
       [
         parse_extra(options),
-        parse_header_footer(:header => options.delete(:header),
-                            :footer => options.delete(:footer),
-                            :layout => options[:layout]),
         parse_outline(options.delete(:outline)),
         parse_margins(options.delete(:margin)),
-        parse_others(options),
         parse_basic_auth(options),
         parse_cover(options.delete(:cover)),        
-        parse_toc(options.delete(:toc))
-        
+        parse_toc(options.delete(:toc)), 
+        parse_others(options),
+        "file:///#{page.path}",
+        parse_header_footer(:header => options.delete(:header),
+                            :footer => options.delete(:footer),
+                            :layout => options[:layout])
       ].join(' ')
     end
-
+    
     def parse_extra(options)
       options[:extra].nil? ? '' : options[:extra]
     end
