@@ -237,14 +237,8 @@ class WickedPdf
         r +=make_options(options, [ :book,
                                     :default_header,
                                     :disable_javascript,
-                                    :grayscale,
-                                    :lowquality,
-                                    :enable_plugins,
-                                    :disable_internal_links,
-                                    :disable_external_links,
                                     :print_media_type,
                                     :disable_smart_shrinking,
-                                    :use_xserver,
                                     :no_background], "", :boolean)
       end
     end
