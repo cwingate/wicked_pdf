@@ -102,13 +102,14 @@ class WickedPdf
      def parse_options(options, page)
       [
         parse_extra(options),
-        parse_others(options),
+        parse_document_options(options),
         parse_outline(options.delete(:outline)),
         parse_margins(options.delete(:margin)),
         parse_basic_auth(options),
         parse_cover(options.delete(:cover)),        
         parse_toc(options.delete(:toc)), 
         "file:///#{page.path}",
+        parse_page_options(options),
         parse_header_footer(:header => options.delete(:header),
                             :footer => options.delete(:footer),
                             :layout => options[:layout])
@@ -177,7 +178,7 @@ class WickedPdf
       else
         r = "cover #{options.delete(:url)} "
       end
-      r += parse_others(options) unless options.blank?
+      r += parse_page_options(options) unless options.blank?
       return r
     end
 
@@ -219,13 +220,9 @@ class WickedPdf
       make_options(options, [:top, :bottom, :left, :right], "margin", :numeric) unless options.blank?
     end
 
-    def parse_others(options)
+    def parse_page_options(options)
       unless options.blank?
-        r = make_options(options, [ :orientation,
-                                    :page_size,
-                                    :page_width,
-                                    :page_height,
-                                    :proxy,
+        r = make_options(options, [ :proxy,
                                     :username,
                                     :password,
                                     :dpi,
@@ -249,6 +246,25 @@ class WickedPdf
                                     :disable_smart_shrinking,
                                     :use_xserver,
                                     :no_background], "", :boolean)
+      end
+    end
+
+    def parse_document_options(options)
+      unless options.blank?
+        r = make_options(options, [ :orientation,
+                                    :page_size,
+                                    :page_width,
+                                    :page_height,
+                                    :dpi])
+        r +=make_options(options, [ :title,], "", :name_value)
+        r +=make_options(options, [ :copies, 
+                                    :image_dpi,
+                                    :image_quality], "", :numeric)
+        r +=make_options(options, [ :grayscale,
+                                    :lowquality,
+                                    :use_xserver,
+                                    :no_collate,
+                                    :no_pdf_compression], "", :boolean)
       end
     end
 
