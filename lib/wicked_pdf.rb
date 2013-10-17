@@ -186,6 +186,7 @@ class WickedPdf
       r = 'toc ' unless options.nil?
       unless options.blank?
         r += make_options(options, [ :font_name, :header_text], "toc")
+        r += make_options(options, [ :xsl_style_sheet])
         r +=make_options(options, [ :depth,
                                     :header_fs,
                                     :l1_font_size,
@@ -201,7 +202,8 @@ class WickedPdf
                                     :l4_indentation,
                                     :l5_indentation,
                                     :l6_indentation,
-                                    :l7_indentation], "toc", :numeric)
+                                    :l7_indentation, 
+                                    :text_size_shrink], "toc", :numeric)
         r +=make_options(options, [ :no_dots,
                                     :disable_links,
                                     :disable_back_links], "toc", :boolean)
