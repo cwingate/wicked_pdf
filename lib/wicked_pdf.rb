@@ -236,8 +236,7 @@ class WickedPdf
                                     :zoom,
                                     :page_offset,
                                     :javascript_delay], "", :numeric)
-         r +=make_options(options, [ :disable_smart_shrinking,
-                                    :book,
+         r +=make_options(options, [:book,
                                     :default_header,
                                     :disable_javascript,
                                     :print_media_type,
