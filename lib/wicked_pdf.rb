@@ -236,13 +236,14 @@ class WickedPdf
                                     :zoom,
                                     :page_offset,
                                     :javascript_delay], "", :numeric)
-        r +=make_options(options, [ :book,
+         r +=make_options(options, [ :disable_smart_shrinking,
+                                    :book,
                                     :default_header,
                                     :disable_javascript,
                                     :print_media_type,
-                                    :disable_smart_shrinking,
                                     :no_background,
                                     :enable_toc_back_links], "", :boolean)
+       
       end
     end
 
